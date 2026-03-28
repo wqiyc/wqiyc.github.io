@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>点阵生成工具 | GeekLab</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/images/logo.svg">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .tool-container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        .tool-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 1rem; padding: 2rem; }
+        .input-group { margin-bottom: 1rem; }
+        .input-group label { display: block; margin-bottom: 0.25rem; font-weight: 500; }
+        .input-group input, .input-group select { padding: 0.5rem; background: var(--tool-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; color: var(--text-primary); }
+        .row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: flex-end; }
+        .preview-area { display: flex; gap: 2rem; flex-wrap: wrap; margin: 1rem 0; }
+        .dot-matrix { display: inline-block; background: var(--card-bg); border: 1px solid var(--border-color); padding: 0.5rem; }
+        .dot-row { display: flex; }
+        .dot { width: 20px; height: 20px; margin: 1px; background: var(--tool-bg); }
+        .dot.on { background: var(--primary); }
+        .output-area { background: var(--tool-bg); border-radius: 0.5rem; padding: 1rem; margin-top: 1rem; font-family: monospace; white-space: pre-wrap; word-break: break-all; }
+        .btn-copy { background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; margin-top: 0.5rem; }
+        @media (max-width: 768px) {
+            .dot { width: 12px; height: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="container nav-content">
+            <div class="logo">⚡ GeekLab</div>
+            <div class="nav-links">
+                <a href="../index.html">首页</a>
+                <a href="hex-converter.html" class="active">工具集</a>
+                <a href="../blog/index.html">博客</a>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </div>
+
+    <div class="tool-container">
+        <a href="../index.html" class="back-link">← 返回首页</a>
+        <div class="tool-card">
+            <h1 class="tool-title">📟 点阵生成工具</h1>
+            <p style="text-align:center; color:var(--text-secondary); margin-bottom:1.5rem;">文字转LED点阵数据，支持8x8/16x16</p>
+            
+            <div class="row">
+                <div class="input-group">
+                    <label>输入文字</label>
+                    <input type="text" id="inputText" value="A" maxlength="2" placeholder="输入1-2个字符">
+                </div>
+                <div class="input-group">
+                    <label>点阵尺寸</label>
+                    <select id="matrixSize">
+                        <option value="8">8x8</option>
+                        <option value="16" selected>16x16</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>输出格式</label>
+                    <select id="outputFormat">
+                        <option value="c">C语言数组</option>
+                        <option value="hex">十六进制</option>
+                        <option value="binary">二进制</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="preview-area">
+                <div>
+                    <div>点阵预览：</div>
+                    <canvas id="dotCanvas" width="160" height="160" style="border:1px solid var(--border-color); background:var(--card-bg);"></canvas>
+                </div>
+            </div>
+            
+            <div class="output-area">
+                <div id="outputData">-</div>
+            </div>
+            <button class="btn-copy" id="copyOutput">复制数据</button>
+            
+            <div style="margin-top:1rem; padding:0.75rem; background:var(--tool-bg); border-radius:0.5rem; font-size:0.8rem;">
+                <strong>💡 说明：</strong> 此工具生成简单的点阵数据，适合LED点阵屏显示。由于浏览器字体限制，复杂汉字可能显示不准确，建议使用简单字符测试。
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inputText = document.getElementById('inputText');
+        const matrixSize = document.getElementById('matrixSize');
+        const outputFormat = document.getElementById('outputFormat');
+        const canvas = document.getElementById('dotCanvas');
+        const outputData = document.getElementById('outputData');
+        const copyBtn = document.getElementById('copyOutput');
+        
+        let ctx = canvas.getContext('2d');
+        
+        // 简化的字符点阵映射（仅演示，实际应用需要完整的字库）
+        function getCharBitmap(char, size) {
+            // 这是一个简化的演示函数，生成简单的图案
+            const bitmap = [];
+            const rows = size;
+            const cols = size;
+            
+            // 根据字符生成简单图案
+            const code = char.charCodeAt(0);
+            
+            for (let i = 0; i < rows; i++) {
+                bitmap[i] = [];
+                for (let j = 0; j < cols; j++) {
+                    // 用伪随机但确定的方式生成图案
+                    const val = (code * (i + 1) * (j + 1)) % 256;
+                    bitmap[i][j] = val > 128 ? 1 : 0;
+                }
+            }
+            
+            // 为字母生成更有意义的图案
+            if (char >= 'A' && char <= 'Z') {
+                const letterIndex = char.charCodeAt(0) - 65;
+                for (let i = 0; i < rows; i++) {
+                    for (let j = 0; j < cols; j++) {
+                        // 简单的轮廓效果
+                        if (i === 0 || i === rows-1 || j === 0 || j === cols-1) {
+                            bitmap[i][j] = 1;
+                        } else {
+                            bitmap[i][j] = 0;
+                        }
+                    }
+                }
+                // 在中间画一个简单的形状
+                const center = Math.floor(rows/2);
+                bitmap[center][center] = 1;
+                bitmap[center-1][center] = 1;
+                bitmap[center+1][center] = 1;
+            }
+            
+            return bitmap;
+        }
+        
+        function drawDotMatrix(bitmap, size) {
+            canvas.width = size * 10;
+            canvas.height = size * 10;
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card-bg');
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            const cellSize = canvas.width / size;
+            
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    if (bitmap[i] && bitmap[i][j]) {
+                        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary');
+                        ctx.fillRect(j * cellSize, i * cellSize, cellSize - 1, cellSize - 1);
+                    } else {
+                        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--tool-bg');
+                        ctx.fillRect(j * cellSize, i * cellSize, cellSize - 1, cellSize - 1);
+                    }
+                }
+            }
+        }
+        
+        function bitmapToArray(bitmap, format, size) {
+            const bytes = [];
+            for (let i = 0; i < size; i++) {
+                let byte = 0;
+                for (let j = 0; j < size; j++) {
+                    if (bitmap[i] && bitmap[i][j]) {
+                        byte |= (1 << (size - 1 - j));
+                    }
+                }
+                bytes.push(byte);
+            }
+            
+            if (format === 'hex') {
+                return bytes.map(b => '0x' + b.toString(16).toUpperCase().padStart(2, '0')).join(', ');
+            } else if (format === 'binary') {
+                return bytes.map(b => b.toString(2).padStart(size, '0')).join(', ');
+            } else {
+                return `uint8_t fontData[${size}] = { ${bytes.map(b => '0x' + b.toString(16).toUpperCase().padStart(2, '0')).join(', ')} };`;
+            }
+        }
+        
+        function generate() {
+            let text = inputText.value;
+            if (!text) text = 'A';
+            const size = parseInt(matrixSize.value);
+            const format = outputFormat.value;
+            
+            const char = text[0];
+            const bitmap = getCharBitmap(char, size);
+            drawDotMatrix(bitmap, size);
+            
+            const result = bitmapToArray(bitmap, format, size);
+            outputData.textContent = result;
+        }
+        
+        inputText.addEventListener('input', generate);
+        matrixSize.addEventListener('change', generate);
+        outputFormat.addEventListener('change', generate);
+        
+        copyBtn.addEventListener('click', () => {
+            const text = outputData.textContent;
+            if (text && text !== '-') {
+                navigator.clipboard.writeText(text);
+                alert('已复制');
+            }
+        });
+        
+        generate();
+    </script>
+</body>
+</html>

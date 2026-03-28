@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>异或校验器 | GeekLab</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/images/logo.svg">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .tool-container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .tool-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 1rem; padding: 2rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 0.75rem; background: var(--tool-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; color: var(--text-primary); font-family: monospace; }
+        .input-group textarea { min-height: 100px; resize: vertical; }
+        .result-area { background: var(--tool-bg); border-radius: 0.5rem; padding: 1rem; margin: 1rem 0; text-align: center; }
+        .result-value { font-size: 1.5rem; font-weight: 700; font-family: monospace; color: var(--primary); }
+        .btn-copy { background: var(--primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; margin-top: 0.5rem; }
+        .mode-group { display: flex; gap: 1rem; margin: 1rem 0; }
+        .mode-group label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="container nav-content">
+            <div class="logo">⚡ GeekLab</div>
+            <div class="nav-links">
+                <a href="../index.html">首页</a>
+                <a href="hex-converter.html" class="active">工具集</a>
+                <a href="../blog/index.html">博客</a>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </div>
+
+    <div class="tool-container">
+        <a href="../index.html" class="back-link">← 返回首页</a>
+        <div class="tool-card">
+            <h1 class="tool-title">🔐 异或校验器</h1>
+            <p style="text-align:center; color:var(--text-secondary); margin-bottom:1.5rem;">计算数据的异或校验值，用于串口通信校验</p>
+            
+            <div class="input-group">
+                <label>输入数据</label>
+                <textarea id="inputData" placeholder="支持两种格式：
+1. 十六进制：A5 3F 02 或 A53F02
+2. 文本：Hello World"></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label>输入格式</label>
+                <select id="inputFormat">
+                    <option value="hex">十六进制 (HEX)</option>
+                    <option value="text">文本 (ASCII)</option>
+                </select>
+            </div>
+            
+            <div class="mode-group">
+                <label>
+                    <input type="radio" name="mode" value="normal" checked> 普通模式
+                </label>
+                <label>
+                    <input type="radio" name="mode" value="cumulative"> 累加异或
+                </label>
+            </div>
+            
+            <div class="input-group" id="initValueGroup" style="display:none;">
+                <label>初始值 (十六进制)</label>
+                <input type="text" id="initValue" value="00" placeholder="例如：00 或 FF">
+            </div>
+            
+            <div class="result-area">
+                <div>校验结果：</div>
+                <div class="result-value" id="xorResult">-</div>
+                <button class="btn-copy" id="copyResult">复制结果</button>
+            </div>
+            
+            <div style="margin-top:1rem; padding:0.75rem; background:var(--tool-bg); border-radius:0.5rem; font-size:0.8rem;">
+                <strong>💡 说明：</strong> 异或校验是对数据每个字节进行异或运算，常用于串口通信的数据校验。
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/main.js"></script>
+    <script>
+        const inputData = document.getElementById('inputData');
+        const inputFormat = document.getElementById('inputFormat');
+        const xorResult = document.getElementById('xorResult');
+        const copyBtn = document.getElementById('copyResult');
+        const normalMode = document.querySelector('input[value="normal"]');
+        const cumulativeMode = document.querySelector('input[value="cumulative"]');
+        const initValueGroup = document.getElementById('initValueGroup');
+        const initValue = document.getElementById('initValue');
+        
+        function hexToBytes(hexStr) {
+            hexStr = hexStr.replace(/\s/g, '');
+            if (hexStr.length % 2 !== 0) return null;
+            const bytes = [];
+            for (let i = 0; i < hexStr.length; i += 2) {
+                bytes.push(parseInt(hexStr.substr(i, 2), 16));
+            }
+            return bytes;
+        }
+        
+        function textToBytes(text) {
+            const bytes = [];
+            for (let i = 0; i < text.length; i++) {
+                bytes.push(text.charCodeAt(i) & 0xFF);
+            }
+            return bytes;
+        }
+        
+        function calculateXOR() {
+            let rawData = inputData.value.trim();
+            if (rawData === '') {
+                xorResult.textContent = '-';
+                return;
+            }
+            
+            let bytes;
+            if (inputFormat.value === 'hex') {
+                bytes = hexToBytes(rawData);
+                if (bytes === null) {
+                    xorResult.textContent = '格式错误';
+                    return;
+                }
+            } else {
+                bytes = textToBytes(rawData);
+            }
+            
+            if (bytes.length === 0) {
+                xorResult.textContent = '-';
+                return;
+            }
+            
+            let initVal = 0;
+            if (cumulativeMode.checked) {
+                initVal = parseInt(initValue.value, 16);
+                if (isNaN(initVal)) initVal = 0;
+            }
+            
+            let result = initVal;
+            for (let i = 0; i < bytes.length; i++) {
+                if (cumulativeMode.checked) {
+                    result = result ^ bytes[i];
+                } else {
+                    if (i === 0) result = bytes[i];
+                    else result = result ^ bytes[i];
+                }
+            }
+            
+            xorResult.textContent = '0x' + result.toString(16).toUpperCase().padStart(2, '0');
+        }
+        
+        inputData.addEventListener('input', calculateXOR);
+        inputFormat.addEventListener('change', calculateXOR);
+        normalMode.addEventListener('change', () => {
+            initValueGroup.style.display = 'none';
+            calculateXOR();
+        });
+        cumulativeMode.addEventListener('change', () => {
+            initValueGroup.style.display = 'block';
+            calculateXOR();
+        });
+        initValue.addEventListener('input', calculateXOR);
+        
+        copyBtn.addEventListener('click', () => {
+            const text = xorResult.textContent;
+            if (text && text !== '-' && text !== '格式错误') {
+                navigator.clipboard.writeText(text);
+                alert('已复制：' + text);
+            }
+        });
+        
+        calculateXOR();
+    </script>
+</body>
+</html>

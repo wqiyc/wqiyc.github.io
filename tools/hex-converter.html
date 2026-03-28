@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>进制转换器 | GeekLab</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/images/logo.svg">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .tool-container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .tool-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 1rem; padding: 2rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .input-group input, .input-group select { width: 100%; padding: 0.75rem; background: var(--tool-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; color: var(--text-primary); font-family: monospace; font-size: 1rem; }
+        .result-area { background: var(--tool-bg); border-radius: 0.5rem; padding: 1rem; margin: 1rem 0; font-family: monospace; }
+        .result-line { margin: 0.5rem 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+        .result-value { font-weight: 600; word-break: break-all; }
+        .btn-copy { background: var(--primary); color: white; border: none; padding: 0.25rem 0.75rem; border-radius: 0.3rem; cursor: pointer; font-size: 0.75rem; }
+        .error-message { color: var(--danger); font-size: 0.8rem; margin-top: 0.25rem; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="container nav-content">
+            <div class="logo">⚡ GeekLab</div>
+            <div class="nav-links">
+                <a href="../index.html">首页</a>
+                <a href="hex-converter.html" class="active">工具集</a>
+                <a href="../blog/index.html">博客</a>
+                <a href="../index.html#products">电源专区</a>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </div>
+
+    <div class="tool-container">
+        <a href="../index.html" class="back-link">← 返回首页</a>
+        <div class="tool-card">
+            <h1 class="tool-title">🔢 进制转换器</h1>
+            <p style="text-align:center; color:var(--text-secondary); margin-bottom:1.5rem;">支持二进制、八进制、十进制、十六进制互转</p>
+            
+            <div class="input-group">
+                <label>输入数字</label>
+                <input type="text" id="inputValue" placeholder="例如：255 或 FF 或 0b11111111" autocomplete="off">
+                <div id="errorMsg" class="error-message"></div>
+            </div>
+            
+            <div class="input-group">
+                <label>输入进制</label>
+                <select id="inputBase">
+                    <option value="2">二进制 (2)</option>
+                    <option value="8">八进制 (8)</option>
+                    <option value="10" selected>十进制 (10)</option>
+                    <option value="16">十六进制 (16)</option>
+                </select>
+            </div>
+            
+            <div class="result-area">
+                <div class="result-line">
+                    <span>二进制：</span>
+                    <span class="result-value" id="binResult">-</span>
+                    <button class="btn-copy" data-copy="binResult">复制</button>
+                </div>
+                <div class="result-line">
+                    <span>八进制：</span>
+                    <span class="result-value" id="octResult">-</span>
+                    <button class="btn-copy" data-copy="octResult">复制</button>
+                </div>
+                <div class="result-line">
+                    <span>十进制：</span>
+                    <span class="result-value" id="decResult">-</span>
+                    <button class="btn-copy" data-copy="decResult">复制</button>
+                </div>
+                <div class="result-line">
+                    <span>十六进制：</span>
+                    <span class="result-value" id="hexResult">-</span>
+                    <button class="btn-copy" data-copy="hexResult">复制</button>
+                </div>
+            </div>
+            
+            <div style="margin-top:1rem; padding:0.75rem; background:var(--tool-bg); border-radius:0.5rem; font-size:0.8rem;">
+                <strong>💡 提示：</strong> 支持前缀写法，如 0b1111 (二进制)、0o77 (八进制)、0xFF (十六进制)
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/main.js"></script>
+    <script>
+        const inputValue = document.getElementById('inputValue');
+        const inputBase = document.getElementById('inputBase');
+        const errorMsg = document.getElementById('errorMsg');
+        
+        const binResult = document.getElementById('binResult');
+        const octResult = document.getElementById('octResult');
+        const decResult = document.getElementById('decResult');
+        const hexResult = document.getElementById('hexResult');
+        
+        function parseWithPrefix(str) {
+            str = str.trim();
+            if (str.startsWith('0b') || str.startsWith('0B')) {
+                return { value: parseInt(str.slice(2), 2), base: 2 };
+            }
+            if (str.startsWith('0o') || str.startsWith('0O')) {
+                return { value: parseInt(str.slice(2), 8), base: 8 };
+            }
+            if (str.startsWith('0x') || str.startsWith('0X')) {
+                return { value: parseInt(str.slice(2), 16), base: 16 };
+            }
+            return null;
+        }
+        
+        function convert() {
+            let rawValue = inputValue.value.trim();
+            let base = parseInt(inputBase.value);
+            
+            if (rawValue === '') {
+                errorMsg.textContent = '';
+                binResult.textContent = octResult.textContent = decResult.textContent = hexResult.textContent = '-';
+                return;
+            }
+            
+            let number;
+            const prefixed = parseWithPrefix(rawValue);
+            if (prefixed) {
+                number = prefixed.value;
+            } else {
+                try {
+                    number = parseInt(rawValue, base);
+                    if (isNaN(number)) throw new Error();
+                } catch(e) {
+                    errorMsg.textContent = '请输入有效的数字';
+                    return;
+                }
+            }
+            
+            if (isNaN(number)) {
+                errorMsg.textContent = '请输入有效的数字';
+                return;
+            }
+            
+            errorMsg.textContent = '';
+            
+            // 处理负数
+            const isNegative = number < 0;
+            const absNumber = Math.abs(number);
+            
+            binResult.textContent = (isNegative ? '-' : '') + absNumber.toString(2);
+            octResult.textContent = (isNegative ? '-' : '') + absNumber.toString(8);
+            decResult.textContent = (isNegative ? '-' : '') + absNumber.toString(10);
+            hexResult.textContent = (isNegative ? '-' : '') + absNumber.toString(16).toUpperCase();
+        }
+        
+        inputValue.addEventListener('input', convert);
+        inputBase.addEventListener('change', convert);
+        
+        document.querySelectorAll('.btn-copy').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.getAttribute('data-copy');
+                const text = document.getElementById(targetId).textContent;
+                if (text && text !== '-') {
+                    navigator.clipboard.writeText(text);
+                    alert('已复制：' + text);
+                }
+            });
+        });
+        
+        convert();
+    </script>
+</body>
+</html>

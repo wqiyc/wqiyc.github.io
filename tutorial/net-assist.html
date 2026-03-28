@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络调试助手使用教程 | GeekLab</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .tutorial-container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .tutorial-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 1rem; padding: 2rem; }
+        .tutorial-title { font-size: 1.8rem; margin-bottom: 1rem; }
+        .tutorial-meta { color: var(--text-secondary); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
+        .tutorial-content h2 { margin: 1.5rem 0 1rem; }
+        .tutorial-content p { margin: 1rem 0; line-height: 1.6; }
+        .tutorial-content pre { background: var(--tool-bg); padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1rem 0; }
+        .tutorial-content img { max-width: 100%; border-radius: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="container nav-content">
+            <div class="logo">⚡ GeekLab</div>
+            <div class="nav-links">
+                <a href="../index.html">首页</a>
+                <a href="../tools/hex-converter.html">工具集</a>
+                <a href="../blog/index.html">博客</a>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </div>
+
+    <div class="tutorial-container">
+        <a href="../index.html" class="back-link">← 返回首页</a>
+        <div class="tutorial-card">
+            <h1 class="tutorial-title">🌐 网络调试助手使用教程</h1>
+            <div class="tutorial-meta">最后更新：2025-03-27 | 阅读时长：5分钟</div>
+            <div class="tutorial-content">
+                <h2>一、软件简介</h2>
+                <p>网络调试助手是一款用于TCP/UDP协议调试的工具，支持客户端和服务器模式，广泛应用于网络通信开发、调试和测试场景。</p>
+                
+                <h2>二、主要功能</h2>
+                <ul>
+                    <li>TCP Client/Server 模式</li>
+                    <li>UDP 通信</li>
+                    <li>十六进制/文本数据收发</li>
+                    <li>数据记录和保存</li>
+                </ul>
+                
+                <h2>三、使用方法</h2>
+                <h3>1. TCP Client 模式</h3>
+                <ol>
+                    <li>选择协议类型为 TCP Client</li>
+                    <li>输入目标服务器IP和端口</li>
+                    <li>点击"连接"按钮</li>
+                    <li>连接成功后即可发送数据</li>
+                </ol>
+                
+                <h3>2. TCP Server 模式</h3>
+                <ol>
+                    <li>选择协议类型为 TCP Server</li>
+                    <li>设置本地监听端口</li>
+                    <li>点击"启动服务器"</li>
+                    <li>等待客户端连接后即可通信</li>
+                </ol>
+                
+                <h3>3. UDP 模式</h3>
+                <ol>
+                    <li>选择协议类型为 UDP</li>
+                    <li>设置本地端口和远程地址</li>
+                    <li>直接发送数据</li>
+                </ol>
+                
+                <h2>四、常见问题</h2>
+                <p><strong>Q: 连接失败怎么办？</strong><br>
+                A: 检查目标地址是否正确，防火墙是否允许程序访问网络。</p>
+                <p><strong>Q: 如何发送十六进制数据？</strong><br>
+                A: 勾选"十六进制发送"选项，输入格式如 "A5 3F 02"。</p>
+                
+                <h2>五、下载地址</h2>
+                <p><a href="../downloads/NetAssist.exe" class="btn-primary" style="display:inline-block; margin-top:1rem;">⬇️ 点击下载网络调试助手</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

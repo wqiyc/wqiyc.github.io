@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简繁转换器 | GeekLab</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/images/logo.svg">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .tool-container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .tool-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 1rem; padding: 2rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .input-group textarea { width: 100%; padding: 0.75rem; background: var(--tool-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; color: var(--text-primary); font-family: monospace; min-height: 120px; resize: vertical; }
+        .direction-buttons { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+        .direction-btn { flex: 1; padding: 0.75rem; background: var(--tool-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; cursor: pointer; text-align: center; }
+        .direction-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .result-area { background: var(--tool-bg); border-radius: 0.5rem; padding: 1rem; margin: 1rem 0; font-family: monospace; white-space: pre-wrap; word-break: break-all; min-height: 100px; }
+        .encoding-group { margin-bottom: 1rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+        .encoding-group label { display: flex; align-items: center; gap: 0.5rem; font-weight: normal; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="container nav-content">
+            <div class="logo">⚡ GeekLab</div>
+            <div class="nav-links">
+                <a href="../index.html">首页</a>
+                <a href="hex-converter.html" class="active">工具集</a>
+                <a href="../blog/index.html">博客</a>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </div>
+
+    <div class="tool-container">
+        <a href="../index.html" class="back-link">← 返回首页</a>
+        <div class="tool-card">
+            <h1 class="tool-title">📖 简繁转换器</h1>
+            <p style="text-align:center; color:var(--text-secondary); margin-bottom:1.5rem;">简体中文 ↔ 繁体中文 转换</p>
+            
+            <div class="direction-buttons">
+                <div class="direction-btn active" data-dir="s2t">简体 → 繁体</div>
+                <div class="direction-btn" data-dir="t2s">繁体 → 简体</div>
+            </div>
+            
+            <div class="encoding-group">
+                <span>编码支持：</span>
+                <label><input type="radio" name="encoding" value="utf8" checked> UTF-8</label>
+                <label><input type="radio" name="encoding" value="gb2312"> GB2312</label>
+                <label><input type="radio" name="encoding" value="big5"> BIG5</label>
+                <label><input type="radio" name="encoding" value="gbk"> GBK</label>
+            </div>
+            
+            <div class="input-group">
+                <label id="inputLabel">输入文本</label>
+                <textarea id="inputText" placeholder="请输入要转换的文字..."></textarea>
+            </div>
+            
+            <div class="result-area" id="resultText">
+                -
+            </div>
+            <button class="btn-copy" id="copyResult" style="background:var(--primary); color:white; border:none; padding:0.5rem 1rem; border-radius:0.5rem; cursor:pointer;">复制结果</button>
+        </div>
+    </div>
+
+    <script>
+        // 简繁转换映射表（简化版，实际生产环境建议使用完整的转换库）
+        const s2tMap = {
+            '中': '中', '国': '國', '简': '簡', '体': '體', '繁': '繁', '体': '體',
+            '汉': '漢', '字': '字', '转': '轉', '换': '換', '码': '碼', '软': '軟',
+            '件': '件', '开': '開', '发': '發', '工': '工', '具': '具', '电': '電',
+            '脑': '腦', '计': '計', '算': '算', '机': '機', '网': '網', '络': '絡',
+            '编': '編', '程': '程', '序': '序', '数': '數', '据': '據', '库': '庫',
+            '系': '系', '统': '統', '应': '應', '用': '用', '程': '程', '式': '式',
+            '服': '服', '务': '務', '器': '器', '端': '端', '客': '客', '户': '戶',
+            '浏': '瀏', '览': '覽', '器': '器', '微': '微', '信': '信', '支': '支',
+            '付': '付', '宝': '寶', '阿': '阿', '里': '裡', '巴': '巴', '云': '雲'
+        };
+        
+        const t2sMap = {};
+        for (let key in s2tMap) {
+            t2sMap[s2tMap[key]] = key;
+        }
+        
+        let currentDir = 's2t';
+        
+        const inputText = document.getElementById('inputText');
+        const resultText = document.getElementById('resultText');
+        const copyBtn = document.getElementById('copyResult');
+        
+        document.querySelectorAll('.direction-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.direction-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentDir = btn.getAttribute('data-dir');
+                convert();
+            });
+        });
+        
+        function convert() {
+            let text = inputText.value;
+            if (!text) {
+                resultText.textContent = '-';
+                return;
+            }
+            
+            const map = currentDir === 's2t' ? s2tMap : t2sMap;
+            let result = '';
+            
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                result += map[char] || char;
+            }
+            
+            resultText.textContent = result;
+        }
+        
+        inputText.addEventListener('input', convert);
+        
+        copyBtn.addEventListener('click', () => {
+            const text = resultText.textContent;
+            if (text && text !== '-') {
+                navigator.clipboard.writeText(text);
+                alert('已复制');
+            }
+        });
+        
+        convert();
+    </script>
+</body>
+</html>

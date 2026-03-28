@@ -1,0 +1,762 @@
+/* ========================================
+   GeekLab 全局样式
+   ======================================== */
+
+/* CSS 变量定义 */
+:root {
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --border-color: #e2e8f0;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --tool-bg: #f1f5f9;
+    --tool-hover: #e2e8f0;
+    --price-color: #f97316;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+[data-theme="dark"] {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border-color: #334155;
+    --tool-bg: #334155;
+    --tool-hover: #475569;
+}
+
+/* 重置样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: var(--bg-color);
+    color: var(--text-primary);
+    line-height: 1.5;
+    transition: background 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* ========================================
+   导航栏
+   ======================================== */
+.navbar {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="dark"] .navbar {
+    background: rgba(30, 41, 59, 0.9);
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 64px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--primary);
+}
+
+.theme-toggle {
+    background: var(--tool-bg);
+    border: none;
+    padding: 0.5rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+}
+
+.sponsor-btn {
+    background: var(--primary);
+    color: white !important;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+}
+
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+/* ========================================
+   Hero 区域
+   ======================================== */
+.hero {
+    padding: 4rem 0;
+    text-align: center;
+    background: linear-gradient(135deg, var(--bg-color) 0%, rgba(59, 130, 246, 0.05) 100%);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: var(--tool-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--tool-hover);
+    transform: translateY(-2px);
+}
+
+/* ========================================
+   通用组件
+   ======================================== */
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2.5rem 0 1.5rem;
+}
+
+.section-title h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.section-link {
+    font-size: 0.9rem;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+/* 工具网格 */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tool-card {
+    background: var(--tool-bg);
+    padding: 1.2rem;
+    border-radius: 1rem;
+    text-align: center;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: var(--text-primary);
+    display: block;
+}
+
+.tool-card:hover {
+    background: var(--tool-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.tool-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.tool-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.tool-desc {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* 下载网格 */
+.download-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.download-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 1.2rem;
+    border-radius: 1rem;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.download-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.download-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.download-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+
+.download-version {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.download-size {
+    font-size: 0.7rem;
+    background: var(--tool-bg);
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 1rem;
+    margin: 0.5rem 0;
+}
+
+.download-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.btn-group {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.download-btn, .tutorial-btn {
+    padding: 0.4rem 1rem;
+    border-radius: 1.5rem;
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.download-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.tutorial-btn {
+    background: var(--tool-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+/* 商品网格 */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.product-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.product-img {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.product-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.product-price {
+    color: var(--price-color);
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+
+.buy-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    transition: all 0.2s;
+}
+
+.buy-btn:hover {
+    background: var(--primary-hover);
+}
+
+/* 博客列表 */
+.blog-list {
+    background: var(--card-bg);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+}
+
+.blog-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.blog-item:last-child {
+    border-bottom: none;
+}
+
+.blog-item:hover .blog-title {
+    color: var(--primary);
+}
+
+.blog-title {
+    font-weight: 500;
+}
+
+.blog-date {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* 双栏布局 */
+.action-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.card h3 {
+    margin-bottom: 0.5rem;
+}
+
+.card p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.donate-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.donate-btn, .ad-btn {
+    padding: 0.5rem 1.2rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.donate-btn {
+    background: var(--tool-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.ad-btn {
+    background: var(--primary);
+    border: none;
+    color: white;
+}
+
+/* 页脚 */
+footer {
+    background: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    margin-top: 2rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.footer-section h4 {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.footer-section a {
+    display: block;
+    color: var(--text-secondary);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.footer-section a:hover {
+    color: var(--primary);
+}
+
+.footer-bottom {
+    border-top: 1px solid var(--border-color);
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* 模态框 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    max-width: 500px;
+    width: 90%;
+    border: 1px solid var(--border-color);
+}
+
+.modal-content h3 {
+    margin-bottom: 1rem;
+}
+
+.modal-content input,
+.modal-content textarea {
+    width: 100%;
+    padding: 0.6rem;
+    margin: 0.5rem 0;
+    background: var(--tool-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    font-family: inherit;
+}
+
+.modal-content textarea {
+    resize: vertical;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.modal-buttons button {
+    flex: 1;
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.modal-buttons button:first-child {
+    background: var(--primary);
+    border: none;
+    color: white;
+}
+
+.modal-buttons button.secondary {
+    background: var(--tool-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.donate-modal {
+    text-align: center;
+}
+
+.qr-codes {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1.5rem 0;
+}
+
+.qr-item {
+    text-align: center;
+}
+
+.qr-placeholder {
+    width: 150px;
+    height: 150px;
+    background: var(--tool-bg);
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.close-btn {
+    background: var(--tool-bg);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 2rem;
+    cursor: pointer;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--card-bg);
+        flex-direction: column;
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        gap: 1rem;
+    }
+    
+    .nav-links.active {
+        display: flex;
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .action-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .tools-grid,
+    .products-grid,
+    .download-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .blog-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1rem;
+    }
+    
+    .tools-grid,
+    .products-grid,
+    .download-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 工具页面通用样式 */
+.tool-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.tool-card-large {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 2rem;
+}
+
+.tool-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+    width: 100%;
+    padding: 0.6rem;
+    background: var(--tool-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    font-family: monospace;
+}
+
+.result-area {
+    background: var(--tool-bg);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem 0;
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.result-line {
+    margin: 0.25rem 0;
+}
+
+.btn-copy {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+}
+
+.error-message {
+    color: var(--danger);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}

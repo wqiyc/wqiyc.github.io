@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unicode转换器 | GeekLab</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/images/logo.svg">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .tool-container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .tool-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 1rem; padding: 2rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .input-group textarea, .input-group input { width: 100%; padding: 0.75rem; background: var(--tool-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; color: var(--text-primary); font-family: monospace; }
+        .input-group textarea { min-height: 120px; resize: vertical; }
+        .direction-buttons { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+        .direction-btn { flex: 1; padding: 0.75rem; background: var(--tool-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; cursor: pointer; text-align: center; }
+        .direction-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .result-area { background: var(--tool-bg); border-radius: 0.5rem; padding: 1rem; margin: 1rem 0; font-family: monospace; word-break: break-all; white-space: pre-wrap; }
+        .format-select { margin-top: 0.5rem; display: flex; gap: 1rem; }
+        .format-select label { display: flex; align-items: center; gap: 0.25rem; cursor: pointer; font-weight: normal; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="container nav-content">
+            <div class="logo">⚡ GeekLab</div>
+            <div class="nav-links">
+                <a href="../index.html">首页</a>
+                <a href="hex-converter.html" class="active">工具集</a>
+                <a href="../blog/index.html">博客</a>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </div>
+
+    <div class="tool-container">
+        <a href="../index.html" class="back-link">← 返回首页</a>
+        <div class="tool-card">
+            <h1 class="tool-title">🌐 Unicode转换器</h1>
+            <p style="text-align:center; color:var(--text-secondary); margin-bottom:1.5rem;">文本与Unicode码点互转</p>
+            
+            <div class="direction-buttons">
+                <div class="direction-btn active" data-dir="text2unicode">文本 → Unicode</div>
+                <div class="direction-btn" data-dir="unicode2text">Unicode → 文本</div>
+            </div>
+            
+            <div class="input-group">
+                <label id="inputLabel">输入文本</label>
+                <textarea id="inputValue" placeholder="例如：Hello 世界"></textarea>
+            </div>
+            
+            <div class="format-select" id="formatSelect">
+                <label>
+                    <input type="radio" name="format" value="hex" checked> 十六进制 (\uXXXX)
+                </label>
+                <label>
+                    <input type="radio" name="format" value="dec"> 十进制 (&#XXXXX;)
+                </label>
+                <label>
+                    <input type="radio" name="format" value="code"> 码点列表 (U+XXXX)
+                </label>
+            </div>
+            
+            <div class="result-area">
+                <div id="resultValue">-</div>
+            </div>
+            <button class="btn-copy" id="copyResult" style="background:var(--primary); color:white; border:none; padding:0.5rem 1rem; border-radius:0.5rem; cursor:pointer;">复制结果</button>
+        </div>
+    </div>
+
+    <script>
+        let currentDir = 'text2unicode';
+        
+        const inputValue = document.getElementById('inputValue');
+        const resultValue = document.getElementById('resultValue');
+        const inputLabel = document.getElementById('inputLabel');
+        const formatSelect = document.getElementById('formatSelect');
+        const copyBtn = document.getElementById('copyResult');
+        
+        document.querySelectorAll('.direction-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.direction-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentDir = btn.getAttribute('data-dir');
+                
+                if (currentDir === 'text2unicode') {
+                    inputLabel.textContent = '输入文本';
+                    formatSelect.style.display = 'flex';
+                } else {
+                    inputLabel.textContent = '输入Unicode码点 (支持格式: \\u4E2D 或 &#20013; 或 U+4E2D)';
+                    formatSelect.style.display = 'none';
+                }
+                convert();
+            });
+        });
+        
+        function textToUnicode(text, format) {
+            let result = '';
+            for (let i = 0; i < text.length; i++) {
+                const code = text.charCodeAt(i);
+                if (format === 'hex') {
+                    result += '\\u' + code.toString(16).toUpperCase().padStart(4, '0');
+                } else if (format === 'dec') {
+                    result += '&#' + code + ';';
+                } else {
+                    result += 'U+' + code.toString(16).toUpperCase() + ' ';
+                }
+            }
+            return result.trim();
+        }
+        
+        function unicodeToText(str) {
+            // 匹配 \uXXXX
+            let result = str.replace(/\\u([0-9A-Fa-f]{4})/g, (match, hex) => {
+                return String.fromCharCode(parseInt(hex, 16));
+            });
+            // 匹配 &#XXXXX;
+            result = result.replace(/&#(\d+);/g, (match, dec) => {
+                return String.fromCharCode(parseInt(dec, 10));
+            });
+            // 匹配 U+XXXX
+            result = result.replace(/U\+([0-9A-Fa-f]{4,6})/g, (match, hex) => {
+                return String.fromCharCode(parseInt(hex, 16));
+            });
+            return result;
+        }
+        
+        function convert() {
+            let raw = inputValue.value;
+            if (!raw.trim()) {
+                resultValue.textContent = '-';
+                return;
+            }
+            
+            if (currentDir === 'text2unicode') {
+                const format = document.querySelector('input[name="format"]:checked').value;
+                resultValue.textContent = textToUnicode(raw, format);
+            } else {
+                resultValue.textContent = unicodeToText(raw);
+            }
+        }
+        
+        inputValue.addEventListener('input', convert);
+        document.querySelectorAll('input[name="format"]').forEach(radio => {
+            radio.addEventListener('change', convert);
+        });
+        
+        copyBtn.addEventListener('click', () => {
+            const text = resultValue.textContent;
+            if (text && text !== '-') {
+                navigator.clipboard.writeText(text);
+                alert('已复制');
+            }
+        });
+        
+        convert();
+    </script>
+</body>
+</html>

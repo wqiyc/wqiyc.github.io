@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面未找到 | GeekLab</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .error-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: var(--bg-color);
+        }
+        .error-content h1 {
+            font-size: 6rem;
+            margin: 0;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .error-content p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin: 1rem 0 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-page">
+        <div class="error-content">
+            <h1>404</h1>
+            <p>哎呀！页面不见了</p>
+            <a href="index.html" class="btn-primary">返回首页</a>
+        </div>
+    </div>
+</body>
+</html>
