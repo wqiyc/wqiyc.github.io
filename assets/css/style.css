@@ -592,20 +592,24 @@ footer {
 }
 
 .qr-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
 }
 
-.qr-placeholder {
+.qr-code {
+    display: block;
     width: 150px;
     height: 150px;
+    object-fit: contain;
     background: var(--tool-bg);
     border-radius: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin-bottom: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
+}
+
+.qr-item span {
+    display: block;
 }
 
 .close-btn {
