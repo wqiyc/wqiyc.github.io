@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单片机网络不常见问题分析 | GeekLab</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <style>
+        .article-container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .article-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 1rem; padding: 2rem; }
+        .article-title { font-size: 1.8rem; margin-bottom: 1rem; }
+        .article-meta { color: var(--text-secondary); margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
+        .article-content h2 { margin: 1.5rem 0 1rem; }
+        .article-content p { margin: 1rem 0; line-height: 1.6; }
+        .article-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        .article-content th, .article-content td { border: 1px solid var(--border-color); padding: 0.6rem 0.75rem; text-align: left; vertical-align: top; }
+        .article-content th { background: var(--tool-bg); font-weight: 600; }
+        .article-content tr:nth-child(even) { background: var(--tool-bg); }
+        @media (max-width: 768px) {
+            .article-content table { display: block; overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="container nav-content">
+            <div class="logo">⚡ GeekLab</div>
+            <div class="nav-links">
+                <a href="../../index.html" class="active">首页</a>
+                <a href="../../tools/hex-converter.html">工具集</a>
+                <a href="../../tools.html">工具箱</a>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="菜单">☰</button>
+        </div>
+    </div>
+
+    <div class="article-container">
+        <a href="../../index.html" class="back-link">← 返回首页</a>
+        <div class="article-card">
+            <h1 class="article-title">单片机网络不常见问题分析</h1>
+            <div class="article-meta">发布日期：2026-06-21 | 分类：编程技术</div>
+            <div class="article-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>问题分类</th>
+                            <th>现象</th>
+                            <th>根因</th>
+                            <th>排查手段</th>
+                            <th>修复方案</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>网络偶发连接/长时间无法连接</td>
+                            <td>时连时不连、长时间连不上</td>
+                            <td>物理层~应用层多因素叠加</td>
+                            <td>分层排查：信号→帧格式→TCP状态→协议字段</td>
+                            <td>逐层定位，见正文第一章</td>
+                        </tr>
+                        <tr>
+                            <td>帧头保留位不为0</td>
+                            <td>部分设备可连、部分不可连</td>
+                            <td>协议栈未将保留位清零，严格设备直接丢弃</td>
+                            <td>Wireshark 过滤 <code>tcp.flags.reserved != 0</code> / <code>ip.flags.rb != 0</code></td>
+                            <td>memset 缓冲区 + 头部构造时强制清零保留位</td>
+                        </tr>
+                        <tr>
+                            <td>ARP缓存超时</td>
+                            <td>长时间通信后突然不通</td>
+                            <td>ARP 表项过期未刷新</td>
+                            <td><code>arp -a</code> 查看 ARP 表</td>
+                            <td>发送免费 ARP，缩短 ARP 超时</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>（待定补充）</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>

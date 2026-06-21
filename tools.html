@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="GeekLab极客工坊 - 嵌入式开发者的工具箱，提供在线转换工具、调试软件下载、电子模块销售">
+    <meta name="keywords" content="嵌入式,开发工具,串口调试,进制转换,电源模块,STM32">
+    <meta name="author" content="GeekLab">
+    <title>GeekLab极客工坊 | 嵌入式开发工具与商城</title>
+    <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="container nav-content">
+            <div class="logo">⚡ GeekLab</div>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="tools/hex-converter.html">工具集</a>
+                <a href="tools.html" class="active">工具箱</a>
+                <a href="#products">电源专区</a>
+                <a href="#dev-tools">开发工具</a>
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+                <a href="#" class="sponsor-btn" id="inquiryBtn">📦 批量询价</a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="菜单">☰</button>
+        </div>
+    </div>
+
+    <main>
+        <!-- Hero 区域 -->
+        <section class="hero">
+            <div class="container hero-content">
+                <h1>嵌入式开发者的<span class="gradient-text">工具箱</span></h1>
+                <p>在线工具 · 调试软件 · 电子模块 · 技术博客</p>
+                <div class="hero-buttons">
+                    <a href="#tools" class="btn-primary">开始使用</a>
+                    <a href="#downloads" class="btn-secondary">下载软件</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- 在线工具模块 -->
+            <section id="tools">
+                <div class="section-title">
+                    <h2>🔧 在线工具</h2>
+                    <a href="tools/hex-converter.html" class="section-link">更多工具 →</a>
+                </div>
+                <div class="tools-grid">
+                    <a href="tools/hex-converter.html" class="tool-card">
+                        <div class="tool-icon">🔢</div>
+                        <div class="tool-name">进制转换器</div>
+                        <div class="tool-desc">2/8/10/16进制互转</div>
+                    </a>
+                    <a href="tools/xor-check.html" class="tool-card">
+                        <div class="tool-icon">🔐</div>
+                        <div class="tool-name">异或校验</div>
+                        <div class="tool-desc">串口通信校验计算</div>
+                    </a>
+                    <a href="tools/unicode.html" class="tool-card">
+                        <div class="tool-icon">🌐</div>
+                        <div class="tool-name">Unicode转换</div>
+                        <div class="tool-desc">文本与Unicode互转</div>
+                    </a>
+                    <a href="tools/dot-matrix.html" class="tool-card">
+                        <div class="tool-icon">📟</div>
+                        <div class="tool-name">点阵生成工具</div>
+                        <div class="tool-desc">文字转LED点阵数据</div>
+                    </a>
+                    <a href="tools/chinese-conv.html" class="tool-card">
+                        <div class="tool-icon">📖</div>
+                        <div class="tool-name">简繁转换</div>
+                        <div class="tool-desc">GB2312/BIG5/GBK转换</div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- 调试工具下载模块 -->
+            <section id="downloads">
+                <div class="section-title">
+                    <h2>💻 调试工具下载</h2>
+                    <a href="tutorial/index.html" class="section-link">使用教程 →</a>
+                </div>
+                <div class="download-grid" id="downloadTools"></div>
+            </section>
+
+            <!-- 电源模块 -->
+            <section id="products">
+                <div class="section-title">
+                    <h2>🔌 电源模块</h2>
+                    <a href="#" class="section-link">查看全部 →</a>
+                </div>
+                <div class="products-grid" id="powerProducts"></div>
+            </section>
+
+            <!-- 开发工具 -->
+            <section id="dev-tools">
+                <div class="section-title">
+                    <h2>🛠️ 开发调试工具</h2>
+                    <a href="#" class="section-link">查看全部 →</a>
+                </div>
+                <div class="products-grid" id="devProducts"></div>
+            </section>
+
+            <!-- 最新博客 -->
+            <section class="blog-list">
+                <div class="section-title">
+                    <h2>📝 最新文章</h2>
+                    <a href="index.html" class="section-link">查看全部 →</a>
+                </div>
+                <div id="blogList"></div>
+            </section>
+
+            <!-- 打赏 + 批量采购 -->
+            <div class="action-row">
+                <div class="card">
+                    <h3>💖 支持作者</h3>
+                    <p>如果这些工具帮到了你，欢迎请我喝杯咖啡~</p>
+                    <div class="donate-buttons">
+                        <button class="donate-btn" id="wechatBtn">微信支付</button>
+                        <button class="donate-btn" id="alipayBtn">支付宝</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>📢 批量采购 / 定制开发</h3>
+                    <p>电源模块、开发工具批量采购可享优惠</p>
+                    <button id="batchInquiryBtn" class="ad-btn">联系客服 →</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h4>GeekLab</h4>
+                <p>专注嵌入式开发工具与模块</p>
+            </div>
+            <div class="footer-section">
+                <h4>快速链接</h4>
+                <a href="tools/index.html">在线工具</a>
+                <a href="index.html">技术博客</a>
+                <a href="#products">产品中心</a>
+            </div>
+            <div class="footer-section">
+                <h4>联系方式</h4>
+                <a href="mailto:geeklab@example.com">geeklab@example.com</a>
+            </div>
+            <div class="footer-section">
+                <h4>关于</h4>
+                <a href="#">关于我们</a>
+                <a href="#">隐私政策</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                © 2025 GeekLab 极客工坊 · 保留所有权利
+            </div>
+        </div>
+    </footer>
+
+    <!-- 询价弹窗 -->
+    <div id="inquiryModal" class="modal">
+        <div class="modal-content">
+            <h3>📋 批量采购询价</h3>
+            <input type="text" id="inquiryName" placeholder="您的姓名 / 公司">
+            <input type="email" id="inquiryEmail" placeholder="电子邮箱">
+            <textarea id="inquiryMsg" rows="3" placeholder="请说明需求（产品名称、数量等）"></textarea>
+            <div class="modal-buttons">
+                <button id="submitInquiry">提交询价</button>
+                <button id="closeModal" class="secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 打赏弹窗 -->
+    <div id="donateModal" class="modal">
+        <div class="modal-content donate-modal">
+            <h3>☕ 感谢支持</h3>
+            <p>扫描下方二维码，请作者喝杯咖啡~</p>
+            <div class="qr-codes">
+                <div class="qr-item">
+                    <img src="assets/images/wechat-qr.png" alt="微信收款码" class="qr-code" id="wechatQR">
+                    <span>微信支付</span>
+                </div>
+                <div class="qr-item">
+                    <img src="assets/images/alipay-qr.png" alt="支付宝收款码" class="qr-code" id="alipayQR">
+                    <span>支付宝</span>
+                </div>
+            </div>
+            <button id="closeDonateModal" class="close-btn">关闭</button>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

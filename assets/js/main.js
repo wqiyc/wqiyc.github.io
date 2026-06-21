@@ -125,10 +125,9 @@ const devProductsData = [
 // 博客数据
 // ========================================
 const blogData = [
-    { title: "网络调试助手使用教程", date: "2025-03-28", url: "/blog/posts/net-assist-guide.html" },
-    { title: "串口调试助手常见问题解决", date: "2025-03-27", url: "/blog/posts/serial-debug-guide.html" },
-    { title: "进制转换工具使用教程", date: "2025-03-27", url: "/blog/posts/hex-converter-guide.html" },
-    { title: "电源模块选型指南", date: "2025-03-22", url: "/blog/posts/power-module-guide.html" }
+    { title: "常用 AI 工具比较分析", date: "2026-06-21", url: "/blog/posts/ai-debug-tools.html" },
+    { title: "单片机网络不常见问题分析", date: "2026-06-21", url: "/blog/posts/mcu-network-issues.html" },
+    { title: "树莓派学习笔记：安装 VSCode 编译程序", date: "2026-06-21", url: "/blog/posts/raspberry-pi-notes.html" }
 ];
 
 // ========================================
@@ -205,7 +204,9 @@ function renderProducts() {
 function renderBlogList() {
     const container = document.getElementById('blogList');
     if (!container) return;
-    
+    // 博客列表页有独立的分页逻辑，跳过首页渲染
+    if (document.getElementById('pagination')) return;
+
     container.innerHTML = blogData.map(post => `
         <a href="${post.url}" class="blog-item">
             <span class="blog-title">${post.title}</span>

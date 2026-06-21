@@ -2,101 +2,11 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>技术博客 | GeekLab</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <style>
-        .blog-container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
-        .blog-list { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 1rem; overflow: hidden; }
-        .blog-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-color); text-decoration: none; color: var(--text-primary); transition: background 0.2s; }
-        .blog-item:last-child { border-bottom: none; }
-        .blog-item:hover { background: var(--tool-bg); }
-        .blog-title { font-weight: 500; }
-        .blog-date { color: var(--text-secondary); font-size: 0.8rem; }
-        .pagination { display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem; }
-        .page-btn { padding: 0.5rem 1rem; background: var(--tool-bg); border: 1px solid var(--border-color); border-radius: 0.5rem; text-decoration: none; color: var(--text-primary); }
-        .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-    </style>
+    <meta http-equiv="refresh" content="0; url=../index.html">
+    <link rel="canonical" href="../index.html">
+    <title>跳转中... | GeekLab</title>
 </head>
 <body>
-    <div class="navbar">
-        <div class="container nav-content">
-            <div class="logo">⚡ GeekLab</div>
-            <div class="nav-links">
-                <a href="../index.html">首页</a>
-                <a href="../tools/hex-converter.html">工具集</a>
-                <a href="index.html" class="active">博客</a>
-                <button class="theme-toggle" id="themeToggle">🌙</button>
-            </div>
-            <button class="mobile-menu-btn">☰</button>
-        </div>
-    </div>
-
-    <div class="blog-container">
-        <h1>📝 技术博客</h1>
-        <p style="color:var(--text-secondary); margin-bottom:2rem;">分享嵌入式开发经验、工具使用技巧</p>
-        
-        <div class="blog-list" id="blogList"></div>
-        
-        <div class="pagination" id="pagination"></div>
-    </div>
-
-    <script src="../assets/js/main.js"></script>
-    <script>
-        const blogPosts = [
-            { title: "网络调试助手使用教程", date: "2025-03-28", url: "posts/net-assist-guide.html", category: "工具教程" },
-            { title: "串口调试助手常见问题解决", date: "2025-03-27", url: "posts/serial-debug-guide.html", category: "工具教程" },
-            { title: "进制转换工具使用教程", date: "2025-03-27", url: "posts/hex-converter-guide.html", category: "工具教程" },
-            { title: "电源模块选型指南", date: "2025-03-22", url: "posts/power-module-guide.html", category: "硬件知识" },
-            { title: "异或校验原理与实现", date: "2025-03-20", url: "posts/xor-check-guide.html", category: "编程技术" },
-            { title: "Unicode与UTF-8详解", date: "2025-03-18", url: "posts/unicode-guide.html", category: "编程技术" },
-            { title: "STM32开发入门指南", date: "2025-03-15", url: "posts/stm32-guide.html", category: "硬件开发" }
-        ];
-        
-        const postsPerPage = 5;
-        let currentPage = 1;
-        
-        function renderBlogList() {
-            const start = (currentPage - 1) * postsPerPage;
-            const end = start + postsPerPage;
-            const pagePosts = blogPosts.slice(start, end);
-            
-            const container = document.getElementById('blogList');
-            container.innerHTML = pagePosts.map(post => `
-                <a href="${post.url}" class="blog-item">
-                    <span class="blog-title">${post.title}</span>
-                    <span class="blog-date">${post.date}</span>
-                </a>
-            `).join('');
-            
-            renderPagination();
-        }
-        
-        function renderPagination() {
-            const totalPages = Math.ceil(blogPosts.length / postsPerPage);
-            const container = document.getElementById('pagination');
-            if (totalPages <= 1) {
-                container.innerHTML = '';
-                return;
-            }
-            
-            let html = '';
-            for (let i = 1; i <= totalPages; i++) {
-                html += `<a href="#" class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</a>`;
-            }
-            container.innerHTML = html;
-            
-            document.querySelectorAll('.page-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    currentPage = parseInt(btn.getAttribute('data-page'));
-                    renderBlogList();
-                    window.scrollTo(0, 0);
-                });
-            });
-        }
-        
-        renderBlogList();
-    </script>
+    <p>正在跳转到 <a href="../index.html">首页</a>...</p>
 </body>
 </html>
